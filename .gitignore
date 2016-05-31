@@ -1,0 +1,9 @@
+# Nuget
+.nuget/
+packages/
+
+# Build Scripts
+Scripts/
+
+# Build Artifacts
+.BuildArtifacts/
