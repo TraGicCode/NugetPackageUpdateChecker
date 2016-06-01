@@ -63,9 +63,5 @@ Describe "Find-NugetPackagesUpdate" {
         It "should return an object of type array" {
             { Find-NugetPackagesUpdate -Path "packages.config" } | Should BeOfType [PSCustomObject]
         }
-        
-        It "should read a packages.config file's packages" {
-            { Find-NugetPackagesUpdate -Path "packages.config" } | Should BeOfType [PSCustomObject]
-        }
     }
 }
