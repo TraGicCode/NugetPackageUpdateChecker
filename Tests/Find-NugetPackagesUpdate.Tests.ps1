@@ -22,4 +22,10 @@ Describe "Find-NugetPackagesUpdate" {
             { Find-NugetPackagesUpdate -Path "C:\SomeFolder\packages.config" } | Should Not Throw
         }
     }
+    
+    Context "Method Body" {
+        It "should return an object of type array" {
+            { Find-NugetPackagesUpdate -Path "packages.config" } | Should BeOfType [PSCustomObject]
+        }
+    }
 }
