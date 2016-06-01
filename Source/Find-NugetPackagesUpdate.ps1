@@ -18,15 +18,14 @@ Function Find-NugetPackagesUpdate
         [ValidateNotNullOrEmpty()]
         [Parameter(Mandatory=$True)]
         [String]
-        $PackageConfigFilePath,
-        [ValidateNotNullOrEmpty()]
+        $Path,
         [Parameter(Mandatory=$False)]
         [switch]
         $ShowPreRelease
     )
     # Invoke-RestMethod -Method Get -Uri https://api.nuget.org/v3/index.json
     $results = @()
-    $packages = Select-Xml -Path $PackageConfigFilePath -XPath "/packages/package" | Select-Object -ExpandProperty Node
+    $packages = Select-Xml -Path $Path -XPath "/packages/package" | Select-Object -ExpandProperty Node
     ForEach ($package in $packages)
     {
         $response = Invoke-RestMethod -Method Get -Uri "https://api-v2v3search-0.nuget.org/query?q=$($package.id)&skip=0&take=1&prerelease=$(if ($ShowPreRelease.IsPresent) { $True } else { $False })&supportedFramework=.NETFramework,Version=v4.5"
