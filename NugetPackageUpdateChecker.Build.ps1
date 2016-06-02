@@ -68,9 +68,9 @@ Task Run-CodeQualityPowerShell {
 Task Run-Tests {
     Import-Module -Name (Find-NugetTool -ToolName Pester.psm1 -PackagesFolder $NuGetPackagesFolder)
 
-    Invoke-Pester -Path .\Tests\ -OutputFile "$BuildArtifactsFolder\TestResults.xml" -OutputFormat NUnitxml
+    # Invoke-Pester -Path .\Tests\ -OutputFile "$BuildArtifactsFolder\TestResults.xml" -OutputFormat NUnitxml
     # TODO: Look at this later
-    # Invoke-Pester -Path .\Tests\ -CodeCoverage .\Source\*
+    Invoke-Pester -Path .\Tests\ -OutputFile "$BuildArtifactsFolder\TestResults.xml" -OutputFormat NUnitxml -CodeCoverage .\Source\*
 }
 
 Task . Clean, Restore-NugetPackages, Run-CodeQualityPowerShell, Run-Tests, {

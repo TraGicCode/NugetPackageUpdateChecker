@@ -15,7 +15,6 @@ Function Find-NugetPackagesUpdate
     [CmdletBinding()]
     [OutputType([PSCustomObject[]])]
     Param(
-        [ValidatePattern('[\\?]packages.config')]
         [ValidateScript({
             If (Test-Path $_) {
                 $True
@@ -48,4 +47,3 @@ Function Find-NugetPackagesUpdate
     }
     return $results
 }
-
