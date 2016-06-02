@@ -1,0 +1,6 @@
+# Not a .NET Project or Solution so prevent appveyor from complaining.  Were just utilizing it for automation.  Not
+# Building .net application
+build: off
+
+test_script:
+  - ps: .\Invoke-Build.ps1
