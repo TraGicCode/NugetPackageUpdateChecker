@@ -1,4 +1,13 @@
-# Description
+# NugetPackageUpdateChecker
+
+
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Coverage-95.45%25-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Dependencies-up--to--date-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/License-MIT-blue.svg)]()
+[![Version](https://img.shields.io/badge/Contact-@TraGicCode-blue.svg)]()
+
 It's vital to always be aware of when your application's third party nuget packages drift from the latest version.  This tool is meant to be easily used for local builds and build server builds.
 
 
