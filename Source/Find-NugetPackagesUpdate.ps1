@@ -13,7 +13,7 @@ $PackagesWithUpdates = Find-NugetPackagesUpdate
 Function Find-NugetPackagesUpdate
 {
     [CmdletBinding()]
-    [OutputType([PSCustomObject])]
+    [OutputType([PSCustomObject[]])]
     Param(
         [ValidatePattern('[\\?]packages.config')]
         [ValidateScript({
@@ -31,6 +31,21 @@ Function Find-NugetPackagesUpdate
         [switch]
         $ShowPreRelease
     )
-    return New-Object PSCustomObject -Property @{}
+    [PSCustomObject[]]$results = @()
+    $packages = Select-Xml -Path $Path -XPath "/packages/package" | Select-Object -ExpandProperty Node
+    ForEach ($package in $packages)
+    {
+          $response = Invoke-RestMethod -Method Get -Uri "https://api-v2v3search-0.nuget.org/query?q=$($package.id)&skip=0&take=1&prerelease=$(if ($ShowPreRelease.IsPresent) { $True } else { $False })&supportedFramework=.NETFramework,Version=v4.5"
+          If ($response[0].data.version -gt $package.version)
+          {
+            $object = New-Object –TypeName PSObject
+            $object | Add-Member –MemberType NoteProperty –Name PackageId –Value $package.id
+            $object | Add-Member –MemberType NoteProperty –Name CurrentVersion –Value $package.version
+            $object | Add-Member -MemberType NoteProperty –Name NewVersion –Value $response[0].data.version
+            $results += $object
+          }
+
+    }
+    return $results
 }
 

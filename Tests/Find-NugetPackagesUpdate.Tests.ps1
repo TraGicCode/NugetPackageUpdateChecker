@@ -33,7 +33,27 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 #      New-Item -Type File -Path TestDrive:\Context.txt
 #   }
 # }
-
+Function Create-PackagesConfigXml
+{
+    [CmdletBinding()]
+    [OutputType([String])]
+    Param(
+        [Parameter(Mandatory=$True)]
+        [ValidateNotNullOrEmpty()]
+        [System.Collections.Hashtable]
+        $Packages
+    )
+$configFile =
+@"
+<?xml version="1.0" encoding="utf-8"?>
+<packages>
+"@
+    ForEach ($key in $Packages.Keys)
+    {
+        $configFile += "<package id='$key' version='$($Packages[$key])' />"
+    }
+return $configFile += "</packages>"
+}
 
 Describe "Find-NugetPackagesUpdate" {
 
@@ -49,19 +69,44 @@ Describe "Find-NugetPackagesUpdate" {
         It "should throw when the file doesn't exist on the filesystem" {
             { Find-NugetPackagesUpdate -Path "TestDrive:\packages.config" } | Should Throw "is not a valid file located on the filesystem."
         }
-
+        
         It "should not throw when the file exists on the filesystem" {
-            # Arrange
             New-Item -Type File -Path TestDrive:\packages.config
             { Find-NugetPackagesUpdate -Path "TestDrive:\packages.config" } | Should Not Throw
-            # Assert
-            Remove-Item -Path TestDrive:\packages.config
         }
     }
     
     Context "Method Body" {
         It "should return an object of type array" {
             { Find-NugetPackagesUpdate -Path "packages.config" } | Should BeOfType [PSCustomObject]
+        }
+        
+        New-Item -Type File -Path TestDrive:\packages.config
+        Create-PackagesConfigXml -Packages @{'PackageA'='1.0.0'} | Add-Content TestDrive:\packages.config
+        
+        It "should return no results for no package updates" {
+            Mock Invoke-RestMethod -MockWith { 
+                $innerObject = New-Object –TypeName PSObject
+                $innerObject | Add-Member –MemberType NoteProperty –Name version –Value "1.0.0"
+                $object = New-Object –TypeName PSObject
+                $object | Add-Member –MemberType NoteProperty –Name data –Value $innerObject
+                return $object
+            }
+
+            $results = Find-NugetPackagesUpdate -Path TestDrive:\packages.config
+            $results | Should BeNullOrEmpty
+        }
+        
+        It "should return results for Pester package" {
+            Mock Invoke-RestMethod -MockWith { 
+                $innerObject = New-Object –TypeName PSObject
+                $innerObject | Add-Member –MemberType NoteProperty –Name version –Value "2.0.0"
+                $object = New-Object –TypeName PSObject
+                $object | Add-Member –MemberType NoteProperty –Name data –Value $innerObject
+                return $object
+            }
+            $results = Find-NugetPackagesUpdate -Path TestDrive:\packages.config
+            $results | Should Not BeNullOrEmpty
         }
     }
 }
