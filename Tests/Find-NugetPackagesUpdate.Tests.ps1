@@ -86,11 +86,11 @@ Describe "Find-NugetPackagesUpdate" {
         
         It "should return no results for no package updates" {
             Mock Invoke-RestMethod -MockWith { 
-                $innerObject = New-Object –TypeName PSObject
-                $innerObject | Add-Member –MemberType NoteProperty –Name version –Value "1.0.0"
-                $object = New-Object –TypeName PSObject
-                $object | Add-Member –MemberType NoteProperty –Name data –Value $innerObject
-                return $object
+                return [PSCustomObject]@{
+                    data = @{
+                        version = "1.0.0"
+                    }
+                }
             }
 
             $results = Find-NugetPackagesUpdate -Path TestDrive:\packages.config
