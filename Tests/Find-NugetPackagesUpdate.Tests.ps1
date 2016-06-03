@@ -99,11 +99,11 @@ Describe "Find-NugetPackagesUpdate" {
         
         It "should return results for Pester package" {
             Mock Invoke-RestMethod -MockWith { 
-                $innerObject = New-Object –TypeName PSObject
-                $innerObject | Add-Member –MemberType NoteProperty –Name version –Value "2.0.0"
-                $object = New-Object –TypeName PSObject
-                $object | Add-Member –MemberType NoteProperty –Name data –Value $innerObject
-                return $object
+                return [PSCustomObject]@{
+                    data = @{
+                        version = "2.0.0"
+                    }
+                }
             }
             $results = Find-NugetPackagesUpdate -Path TestDrive:\packages.config
             $results | Should Not BeNullOrEmpty
