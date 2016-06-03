@@ -1,6 +1,6 @@
 <#
 .Synopsis
-    VendorPortal Build Script
+    NugetPackageUpdateChecker Build Script
 #>
 
 [CmdletBinding()]
