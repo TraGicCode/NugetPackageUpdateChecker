@@ -3,7 +3,7 @@
 
 [![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)]()
 [![Version](https://ci.appveyor.com/api/projects/status/github/TraGicCode/NugetPackageUpdateChecker?svg=true)]()
-[![Version](https://img.shields.io/badge/Coverage-95.45%25-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Coverage-94.44%25-brightgreen.svg)]()
 [![Version](https://img.shields.io/badge/Dependencies-up--to--date-brightgreen.svg)]()
 [![Version](https://img.shields.io/badge/License-MIT-blue.svg)]()
 [![Version](https://img.shields.io/badge/Contact-@TraGicCode-blue.svg)]()

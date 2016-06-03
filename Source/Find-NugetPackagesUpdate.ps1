@@ -37,11 +37,11 @@ Function Find-NugetPackagesUpdate
           $response = Invoke-RestMethod -Method Get -Uri "https://api-v2v3search-0.nuget.org/query?q=$($package.id)&skip=0&take=1&prerelease=$(if ($ShowPreRelease.IsPresent) { $True } else { $False })&supportedFramework=.NETFramework,Version=v4.5"
           If ($response[0].data.version -gt $package.version)
           {
-            $object = New-Object –TypeName PSObject
-            $object | Add-Member –MemberType NoteProperty –Name PackageId –Value $package.id
-            $object | Add-Member –MemberType NoteProperty –Name CurrentVersion –Value $package.version
-            $object | Add-Member -MemberType NoteProperty –Name NewVersion –Value $response[0].data.version
-            $results += $object
+              $results += [PSCustomObject]@{
+                  PackageId = $package.id
+                  CurrentVersion = $package.version
+                  NewVersion = $response[0].data.version
+              }
           }
 
     }
