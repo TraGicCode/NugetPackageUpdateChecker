@@ -7,3 +7,4 @@ build: off
 
 test_script:
   - ps: .\Invoke-Build.ps1
+  - ps: .\Invoke-Build.ps1 Assign-Version

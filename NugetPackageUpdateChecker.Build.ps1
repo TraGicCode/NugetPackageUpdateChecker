@@ -73,5 +73,9 @@ Task Run-Tests {
     Invoke-Pester -Path .\Tests\ -OutputFile "$BuildArtifactsFolder\TestResults.xml" -OutputFormat NUnitxml -CodeCoverage .\Source\*
 }
 
+Task Assign-Version {
+    Exec { & "$NuGetPackagesFolder\GitVersion.CommandLine.3.6.1\tools\GitVersion.exe" /l console /output buildserver /b (get-item env:APPVEYOR_REPO_BRANCH).Value }
+}
+
 Task . Clean, Restore-NugetPackages, Run-CodeQualityPowerShell, Run-Tests, {
 }
