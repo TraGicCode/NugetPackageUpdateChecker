@@ -13,6 +13,15 @@ It's vital to always be aware of when your application's third party nuget packa
 ## Whats wrong with falling to far behind?
 The issue with falling to far behind on a version of a certain core thirdparty library is that fact that risk goes up.  Risk actually gets worse the longer you wait to perform upgrades.  If anything you should atleast take small steps by incrementally upgrading on each release instead of a giant jump.  This is known as a 'big bang' update according to Andreas Ohlund.  In order to solve this you simply need to be willing to bring awareness of version changes to third parties along with willingness to perform the upgrade and their possible breaking changes.  Also reading release notes...etc.  Generally Libraries should strive to keep in mind backwards compatibility so that users can update the library, continue to use the old deprecated stuff, but implement new things using the new stuff while at the same time slowly taking chunks of code using old deperecated functionality and upgrading it slowly.  If the third party doesnt keep this part of the deal your out of luck! :(
 
+## Usage
+
+    C:\PS> Find-NugetPackagesUpdate -Path "C:\Source\Project\packages.config"
+
+This command will report out of date nuget packages from the nuget.org v3 authorative package source.
+
+    C:\PS> Find-NugetPackagesUpdate -Path "C:\Source\Project\packages.config" -ShowPreRelease
+
+Providing the PreRelease switch will show you the latest version of a package taking into account prereleases.
 
 ## Contributing
 
