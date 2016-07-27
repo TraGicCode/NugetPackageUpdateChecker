@@ -8,6 +8,7 @@ build: off
 test_script:
   - ps: .\Invoke-Build.ps1
 
-- provider: Slack
-  incoming_webhook:
-    secure: https://hooks.slack.com/services/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
+notifications:
+  - provider: Slack
+    incoming_webhook:
+      secure: https://hooks.slack.com/services/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
