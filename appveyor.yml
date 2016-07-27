@@ -9,6 +9,10 @@ test_script:
   - ps: .\Invoke-Build.ps1
 
 notifications:
-  - provider: Slack
-    incoming_webhook:
-      secure: https://hooks.slack.com/services/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
+- provider: Slack
+  incoming_webhook: https://hooks.slack.com/services/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
+  auth_token: ignore-me
+  channel: general
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: false
