@@ -1,10 +1,16 @@
 ﻿<#
 .SYNOPSIS
-Determine which nuget packages contain stable updates
+Check for nuget package updates.
 
 .DESCRIPTION
 Use to parse a nuget packages.config file and query the nuget RESTful api to check for any
 stable updates available.
+
+.PARAMETER Path
+Absolute or relative path to your packages.config file.
+
+.PARAMETER ShowPreRelease
+Take into consideration prelease versions.
 
 .EXAMPLE
 $PackagesWithUpdates = Find-NugetPackagesUpdate
