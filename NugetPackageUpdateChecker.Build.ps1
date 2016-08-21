@@ -12,6 +12,7 @@ Set-StrictMode -Version Latest
 # Includes
 . ".\Scripts\Nuget-Helpers.ps1"
 . ".\Scripts\Find-NugetTool.ps1"
+. ".\Source\Find-NugetPackagesUpdate.ps1"
 
 # Script Variables
 $BuildArtifactsFolder = "$BuildRoot\.BuildArtifacts"
@@ -63,15 +64,20 @@ Task Run-CodeQualityPowerShell {
 }
 
 #=================================================================================================
+# Synopsis: Run NugetPackageUpdater on self (dogfood)
+#=================================================================================================
+Task Run-NugetPackageUpdateChecker {
+    Find-NugetPackagesUpdate -Path $NugetPackageConfig
+}
+
+#=================================================================================================
 # Synopsis: Run Code Quality on Powershell Scripts
 #=================================================================================================
 Task Run-Tests {
     Import-Module -Name (Find-NugetTool -ToolName Pester.psm1 -PackagesFolder $NuGetPackagesFolder)
 
-    # Invoke-Pester -Path .\Tests\ -OutputFile "$BuildArtifactsFolder\TestResults.xml" -OutputFormat NUnitxml
-    # TODO: Look at this later
     Invoke-Pester -Path .\Tests\ -OutputFile "$BuildArtifactsFolder\TestResults.xml" -OutputFormat NUnitxml -CodeCoverage .\Source\*
 }
 
-Task . Clean, Restore-NugetPackages, Run-CodeQualityPowerShell, Run-Tests, {
+Task . Clean, Restore-NugetPackages, Run-CodeQualityPowerShell, Run-NugetPackageUpdateChecker, Run-Tests, {
 }
