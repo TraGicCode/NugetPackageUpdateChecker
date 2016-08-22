@@ -67,7 +67,7 @@ Task Run-CodeQualityPowerShell {
 # Synopsis: Run NugetPackageUpdater on self (dogfood)
 #=================================================================================================
 Task Run-NugetPackageUpdateChecker {
-    Find-NugetPackagesUpdate -Path $NugetPackageConfig
+    Find-NugetPackagesUpdate -Path $NugetPackageConfig -PackageSources "https://www.powershellgallery.com/api/v2"
 }
 
 #=================================================================================================

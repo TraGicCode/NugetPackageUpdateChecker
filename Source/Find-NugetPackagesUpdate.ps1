@@ -40,7 +40,7 @@ Function Find-NugetPackagesUpdate
         $ShowPreRelease
     )
     [PSCustomObject[]]$results = @()
-    $packages = Get-NugetPackage -Path $Path
+    $packages = Get-NugetPackagesFromFile -Path $Path
 
 
 
@@ -51,12 +51,21 @@ Function Find-NugetPackagesUpdate
 
     ForEach($package in $packages)
     {
-        $found = $false
         ForEach($packageSource in $PackageSources)
         {
-            
+            $response = Invoke-RestMethod -Method Get -Uri "$packageSource/FindPackagesById()?id='$($package.id)'&`$filter=IsAbsoluteLatestVersion"
+            If ($response.properties.Version -gt $package.Version)
+            {
+                $results += [PSCustomObject]@{
+                    PackageId = $package.Id
+                    CurrentVersion = $package.Version
+                    NewVersion = $response.properties.Version
+                }
+            }
         }
     }
+
+    return $results
 
 
     ## 2.) Is there a way i can ask a package source what version of nuget api its using
@@ -84,7 +93,7 @@ Function Find-NugetPackagesUpdate
     }
 
     #>
-
+<#
     ForEach ($package in $packages)
     {
           $response = Invoke-RestMethod -Method Get -Uri "https://www.powershellgallery.com/api/v2/FindPackagesById()?id='$($package.id)'&`$filter=IsAbsoluteLatestVersion&includePrerelease=$(if ($ShowPreRelease.IsPresent) { $True } else { $False })"
@@ -100,9 +109,10 @@ Function Find-NugetPackagesUpdate
 
 
     return $results
+    #>
 }
 
-Function Get-NugetPackage
+Function Get-NugetPackagesFromFile
 {
     [CmdletBinding()]
     [OutputType([PSCustomObject[]])]
